@@ -15,12 +15,12 @@ import java.util.List;
 public class Topic {
 
 	@NonNull private Course course;
+	@NonNull private Long id;
 	@NonNull private String message;
 	@NonNull private String title;
 	private List<Answer> answers = new ArrayList<>();
 	private User author;
 	private LocalDateTime createdAt = LocalDateTime.now();
-	private Long id;
 	private TopicStatuses status = TopicStatuses.NOT_ANSWERED;
 
 	@Override

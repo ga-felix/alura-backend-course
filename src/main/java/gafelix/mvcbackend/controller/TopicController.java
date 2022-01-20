@@ -2,9 +2,8 @@ package gafelix.mvcbackend.controller;
 
 import gafelix.mvcbackend.model.Course;
 import gafelix.mvcbackend.model.Topic;
-import org.springframework.stereotype.Controller;
+import gafelix.mvcbackend.model.TopicDto;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -14,8 +13,8 @@ import java.util.List;
 public class TopicController {
 
     @GetMapping("/topics")
-    public List<Topic> listTopics() {
-        Topic topic = new Topic(new Course("Duvida", "Spring Boot API"), "Não entendi...", "Duvida com Spring");
-        return Arrays.asList(topic, topic, topic);
+    public List<TopicDto> listTopics() {
+        Topic topic = new Topic(new Course("Dúvida", "Spring Boot API"), 1L, "Não entendi...", "Dúvida com Spring");
+        return TopicDto.convertListToDto(Arrays.asList(topic, topic, topic));
     }
 }
