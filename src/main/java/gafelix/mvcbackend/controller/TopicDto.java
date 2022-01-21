@@ -1,5 +1,6 @@
-package gafelix.mvcbackend.model;
+package gafelix.mvcbackend.controller;
 
+import gafelix.mvcbackend.model.Topic;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

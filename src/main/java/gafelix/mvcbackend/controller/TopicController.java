@@ -2,28 +2,41 @@ package gafelix.mvcbackend.controller;
 
 import gafelix.mvcbackend.model.Course;
 import gafelix.mvcbackend.model.Topic;
-import gafelix.mvcbackend.model.TopicDto;
+import gafelix.mvcbackend.repository.CourseRepository;
 import gafelix.mvcbackend.repository.TopicRepository;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
-@RestController // Adiciona @ResponseBody em todos os métodos do Controller
+@RestController
+@RequestMapping("/topics")
 public class TopicController {
 
     private TopicRepository topicRepository;
+    private CourseRepository courseRepository;
 
     @Autowired
     public void setTopicRepository(TopicRepository topicRepository) {
         this.topicRepository = topicRepository;
     }
 
-    @GetMapping("/topics")
+    @Autowired
+    public void setCourseRepository(CourseRepository courseRepository) { this.courseRepository = courseRepository;}
+
+    @GetMapping
     public List<TopicDto> listTopics(@RequestParam String courseName) {
         return TopicDto.convertListToDto(topicRepository.findByCourseName(courseName));
+    }
+
+    @PostMapping
+    public ResponseEntity<TopicDto> createTopic(@RequestBody TopicForm form, UriComponentsBuilder uriBuilder) {
+        Topic topic = form.convert(this.courseRepository);
+        this.topicRepository.save(topic);
+        URI uri = uriBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
+        return ResponseEntity.created(uri).body(new TopicDto(topic));
     }
 }
