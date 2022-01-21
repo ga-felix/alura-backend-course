@@ -14,7 +14,7 @@ public class TopicController {
 
     @GetMapping("/topics")
     public List<TopicDto> listTopics() {
-        Topic topic = new Topic(new Course("Dúvida", "Spring Boot API"), 1L, "Não entendi...", "Dúvida com Spring");
+        Topic topic = new Topic(new Course("Dúvidas", "Spring Boot API"), 1L, "Não entendi...", "Dúvida com Spring");
         return TopicDto.convertListToDto(Arrays.asList(topic, topic, topic));
     }
 }

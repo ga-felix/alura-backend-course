@@ -2,12 +2,20 @@ package gafelix.mvcbackend.model;
 
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 @Getter @Setter
 @RequiredArgsConstructor
+@Entity
 public class Course {
 
 	@NonNull private String category;
 	@NonNull private String name;
+	@Id
+	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long id;
 	
 	@Override

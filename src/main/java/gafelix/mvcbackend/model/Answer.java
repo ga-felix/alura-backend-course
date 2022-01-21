@@ -3,16 +3,22 @@ package gafelix.mvcbackend.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter @Setter
+@Entity
 public class Answer {
 
+	@ManyToOne
 	private User author;
 	private Boolean addressed = false;
 	private LocalDateTime createdDate = LocalDateTime.now();
+	@Id
+	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long id;
 	private String message;
+	@ManyToOne
 	private Topic topic;
 
 	@Override
