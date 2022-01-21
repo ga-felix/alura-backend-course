@@ -2,8 +2,6 @@ package gafelix.mvcbackend.model;
 
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -12,17 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter @Setter
-@RequiredArgsConstructor
 @Entity
 public class Topic {
 
 	@ManyToOne
-	@NonNull private Course course;
+	private Course course;
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	@NonNull private Long id;
-	@NonNull private String message;
-	@NonNull private String title;
+	private Long id;
+	private String message;
+	private String title;
 	@OneToMany(mappedBy = "topic")
 	private List<Answer> answers = new ArrayList<>();
 	@ManyToOne
