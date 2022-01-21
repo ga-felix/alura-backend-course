@@ -7,6 +7,7 @@ import gafelix.mvcbackend.repository.TopicRepository;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class TopicController {
     }
 
     @GetMapping("/topics")
-    public List<TopicDto> listTopics() {
-        return TopicDto.convertListToDto(topicRepository.findAll());
+    public List<TopicDto> listTopics(@RequestParam String courseName) {
+        return TopicDto.convertListToDto(topicRepository.findByCourseName(courseName));
     }
 }
