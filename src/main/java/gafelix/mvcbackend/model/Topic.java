@@ -28,6 +28,10 @@ public class Topic {
 	@Enumerated(EnumType.STRING)
 	private TopicStatuses status = TopicStatuses.NOT_ANSWERED;
 
+	public Topic() {
+
+	}
+
 	public Topic(String message, String title, Course course) {
 		this.message = message;
 		this.title = title;
