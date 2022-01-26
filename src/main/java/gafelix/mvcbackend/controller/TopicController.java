@@ -1,11 +1,14 @@
 package gafelix.mvcbackend.controller;
 
-import gafelix.mvcbackend.model.Course;
 import gafelix.mvcbackend.model.Topic;
-import gafelix.mvcbackend.repository.CourseRepository;
-import gafelix.mvcbackend.repository.TopicRepository;
 import gafelix.mvcbackend.service.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -13,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/topics")
@@ -27,12 +29,15 @@ public class TopicController {
     }
 
     @GetMapping
-    public List<TopicDto> listTopics(@RequestParam String courseName) {
-        return TopicDto.convertListToDto(repositories.getTopic().findByCourseName(courseName));
+    @Cacheable("listaDeTopicos")
+    public Page<TopicDto> listTopics(@RequestParam(required = false) String courseName, @PageableDefault(direction = Sort.Direction.ASC) Pageable pages) {
+        if(courseName == null || courseName.isBlank()) return TopicDto.convertListToDto(repositories.getTopic().findAll(pages));
+        return TopicDto.convertListToDto(repositories.getTopic().findByCourseName(courseName, pages));
     }
 
     @PostMapping
     @Transactional
+    @CacheEvict("listaDeTopicos")
     public ResponseEntity<TopicDto> createTopic(@RequestBody @Valid TopicForm form, UriComponentsBuilder uriBuilder) {
         Topic topic = form.convert(repositories.getCourse());
         repositories.getTopic().save(topic);
@@ -49,6 +54,7 @@ public class TopicController {
     
     @PutMapping("/{id}")
     @Transactional
+    @CacheEvict("listaDeTopicos")
     public ResponseEntity<?> updateTopic(@PathVariable Long id, @RequestBody @Valid UpdateTopicForm form) {
         Topic topic = repositories.getTopicById(id);
         if(topic != null) {
@@ -61,6 +67,7 @@ public class TopicController {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @CacheEvict("listaDeTopicos")
     public ResponseEntity<?> deleteTopic(@PathVariable Long id) {
         Topic topic = repositories.getTopicById(id);
         if(topic != null) {

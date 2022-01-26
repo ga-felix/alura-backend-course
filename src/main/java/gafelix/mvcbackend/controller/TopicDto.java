@@ -2,6 +2,7 @@ package gafelix.mvcbackend.controller;
 
 import gafelix.mvcbackend.model.Topic;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,8 +23,8 @@ public class TopicDto {
         this.createdAt = topic.getCreatedAt();
     }
 
-    public static List<TopicDto> convertListToDto(List<Topic> topics) {
-        return topics.stream().map(TopicDto::new).collect(Collectors.toList());
+    public static Page<TopicDto> convertListToDto(Page<Topic> topics) {
+        return topics.map(TopicDto::new);
     }
 
 }
