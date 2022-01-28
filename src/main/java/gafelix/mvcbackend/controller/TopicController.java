@@ -1,5 +1,9 @@
 package gafelix.mvcbackend.controller;
 
+import gafelix.mvcbackend.controller.dto.DetailedTopicDto;
+import gafelix.mvcbackend.controller.dto.TopicDto;
+import gafelix.mvcbackend.controller.form.TopicForm;
+import gafelix.mvcbackend.controller.form.UpdateTopicForm;
 import gafelix.mvcbackend.model.Topic;
 import gafelix.mvcbackend.service.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;

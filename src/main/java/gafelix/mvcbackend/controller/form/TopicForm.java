@@ -1,4 +1,4 @@
-package gafelix.mvcbackend.controller;
+package gafelix.mvcbackend.controller.form;
 
 import gafelix.mvcbackend.model.Topic;
 import gafelix.mvcbackend.repository.CourseRepository;

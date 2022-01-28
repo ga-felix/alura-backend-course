@@ -1,12 +1,10 @@
-package gafelix.mvcbackend.controller;
+package gafelix.mvcbackend.controller.dto;
 
 import gafelix.mvcbackend.model.Topic;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 public class TopicDto {

@@ -1,4 +1,4 @@
-package gafelix.mvcbackend.controller;
+package gafelix.mvcbackend.controller.dto;
 
 import gafelix.mvcbackend.model.Answer;
 
