@@ -39,7 +39,8 @@ public class LoginController {
         UsernamePasswordAuthenticationToken login = form.convert();
         try {
             Authentication authentication = authenticationManager.authenticate(login);
-            return ResponseEntity.ok(new TokenDto(tokenService.createToken(authentication), "Bearer"));
+            TokenDto token = new TokenDto(tokenService.createToken(authentication), "Bearer");
+            return ResponseEntity.ok(token);
         } catch(AuthenticationException e) {
             return ResponseEntity.badRequest().build();
         }

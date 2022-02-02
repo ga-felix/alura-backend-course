@@ -1,8 +1,8 @@
 package gafelix.mvcbackend.service;
 
 import gafelix.mvcbackend.model.User;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -29,6 +29,19 @@ public class TokenService {
                 .setExpiration(new Date(now.getTime() + Long.parseLong(getExpiration())))
                 .signWith(SignatureAlgorithm.HS256, getSecret())
                 .compact();
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(this.getSecret()).build().parse(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(this.getSecret()).build().parseClaimsJws(token).getBody();
     }
 
 }

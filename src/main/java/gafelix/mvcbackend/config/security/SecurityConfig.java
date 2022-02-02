@@ -1,5 +1,9 @@
 package gafelix.mvcbackend.config.security;
 
+import gafelix.mvcbackend.config.validation.TokenAuthentication;
+import gafelix.mvcbackend.service.RepositoryManager;
+import gafelix.mvcbackend.service.TokenService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,15 +15,28 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthService authService;
+    @Getter private TokenService tokenService;
+    @Getter private RepositoryManager repositories;
 
     @Autowired
     public void setAuthService(AuthService authService) { this.authService = authService; }
+
+    @Autowired
+    public void setTokenService(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
+
+    @Autowired
+    public void setRepositories(RepositoryManager repositories) {
+        this.repositories = repositories;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -32,7 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(new TokenAuthentication(getTokenService(), getRepositories()), UsernamePasswordAuthenticationFilter.class);
     }
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
